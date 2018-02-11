@@ -1,8 +1,6 @@
 package com.ptrader.connector;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 public class ApiJsonResponse {
 
@@ -21,12 +19,7 @@ public class ApiJsonResponse {
 
     @Override
     public String toString() {
-        try {
-            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            return ow.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return JSONUtils.toString(this);
     }
 
 }

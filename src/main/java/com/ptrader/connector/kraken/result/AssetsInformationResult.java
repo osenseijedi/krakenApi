@@ -1,8 +1,7 @@
 package com.ptrader.connector.kraken.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.util.Map;
 
@@ -23,12 +22,7 @@ public class AssetsInformationResult extends Result<Map<String, AssetsInformatio
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                    .append("alternateName", alternateName)
-                    .append("assetClass", assetClass)
-                    .append("decimals", decimals)
-                    .append("displayDecimals", displayDecimals)
-                    .toString();
+            return JSONUtils.toString(this);
         }
     }
 }

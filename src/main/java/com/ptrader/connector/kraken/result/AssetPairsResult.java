@@ -3,10 +3,9 @@ package com.ptrader.connector.kraken.result;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -53,10 +52,7 @@ public class AssetPairsResult extends Result<Map<String, AssetPairsResult.AssetP
 
             @Override
             public String toString() {
-                return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                        .append("volume", volume)
-                        .append("percent", percent)
-                        .toString();
+                return JSONUtils.toString(this);
             }
         }
 
@@ -111,25 +107,7 @@ public class AssetPairsResult extends Result<Map<String, AssetPairsResult.AssetP
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                    .append("alternatePairName", alternatePairName)
-                    .append("baseAssetClass", baseAssetClass)
-                    .append("baseAssetId", baseAssetId)
-                    .append("quoteAssetClass", quoteAssetClass)
-                    .append("quoteAssetId", quoteAssetId)
-                    .append("lot", lot)
-                    .append("pairDecimals", pairDecimals)
-                    .append("lotDecimals", lotDecimals)
-                    .append("lotMultiplier", lotMultiplier)
-                    .append("leverageBuy", leverageBuy)
-                    .append("leverageSell", leverageSell)
-                    .append("fees", fees)
-                    .append("feesMaker", feesMaker)
-                    .append("feeVolumeCurrency", feeVolumeCurrency)
-                    .append("marginCall", marginCall)
-                    .append("marginLevel", marginLevel)
-                    .append("marginStop", marginStop)
-                    .toString();
+            return JSONUtils.toString(this);
         }
     }
 }

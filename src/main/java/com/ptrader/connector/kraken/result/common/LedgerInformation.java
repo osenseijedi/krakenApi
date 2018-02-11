@@ -1,8 +1,7 @@
 package com.ptrader.connector.kraken.result.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.math.BigDecimal;
 
@@ -29,15 +28,6 @@ public class LedgerInformation {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("referenceId", referenceId)
-                .append("timestamp", timestamp)
-                .append("type", type)
-                .append("assetClass", assetClass)
-                .append("asset", asset)
-                .append("amount", amount)
-                .append("fee", fee)
-                .append("balance", balance)
-                .toString();
+        return JSONUtils.toString(this);
     }
 }

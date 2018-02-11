@@ -1,14 +1,17 @@
 package com.ptrader.connector.kraken;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptrader.connector.ApiJsonExchange;
 import com.ptrader.connector.ApiJsonRequestType;
 import com.ptrader.connector.kraken.input.InfoInput;
 import com.ptrader.connector.kraken.input.Interval;
 import com.ptrader.connector.kraken.result.*;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -100,7 +103,7 @@ public class KrakenApiClient {
 
     private <T extends Result> T makeResult(String rawResponse, Class<T> resultClass) {
         try {
-            return new ObjectMapper().readValue(rawResponse, resultClass);
+            return JSONUtils.fromJsonStringToObject(rawResponse, resultClass);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

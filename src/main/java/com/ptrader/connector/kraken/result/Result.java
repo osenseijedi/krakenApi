@@ -1,7 +1,6 @@
 package com.ptrader.connector.kraken.result;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +24,6 @@ public class Result<T> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("error", error)
-                .append("result", result)
-                .toString();
+        return JSONUtils.toString(this);
     }
 }

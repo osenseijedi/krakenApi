@@ -3,8 +3,7 @@ package com.ptrader.connector.kraken.result;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -22,11 +21,7 @@ public class TickerInformationResult extends Result<Map<String, TickerInformatio
 
             @Override
             public String toString() {
-                return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                        .append("price", price)
-                        .append("wholeLotVolume", wholeLotVolume)
-                        .append("lotVolume", lotVolume)
-                        .toString();
+                return JSONUtils.toString(this);
             }
         }
 
@@ -38,10 +33,7 @@ public class TickerInformationResult extends Result<Map<String, TickerInformatio
 
             @Override
             public String toString() {
-                return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                        .append("price", price)
-                        .append("lotVolume", lotVolume)
-                        .toString();
+                return JSONUtils.toString(this);
             }
         }
 
@@ -53,10 +45,7 @@ public class TickerInformationResult extends Result<Map<String, TickerInformatio
 
             @Override
             public String toString() {
-                return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                        .append("today", today)
-                        .append("last24hours", last24hours)
-                        .toString();
+                return JSONUtils.toString(this);
             }
         }
 
@@ -68,10 +57,7 @@ public class TickerInformationResult extends Result<Map<String, TickerInformatio
 
             @Override
             public String toString() {
-                return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                        .append("today", today)
-                        .append("last24hours", last24hours)
-                        .toString();
+                return JSONUtils.toString(this);
             }
         }
 
@@ -104,17 +90,7 @@ public class TickerInformationResult extends Result<Map<String, TickerInformatio
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                    .append("ask", ask)
-                    .append("bid", bid)
-                    .append("lastTradeClosed", lastTradeClosed)
-                    .append("volume", volume)
-                    .append("volumeWeightAverage", volumeWeightAverage)
-                    .append("numberOfTrades", numberOfTrades)
-                    .append("low", low)
-                    .append("high", high)
-                    .append("todayOpenPrice", todayOpenPrice)
-                    .toString();
+            return JSONUtils.toString(this);
         }
     }
 }

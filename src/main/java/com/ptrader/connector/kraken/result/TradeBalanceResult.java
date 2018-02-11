@@ -1,8 +1,7 @@
 package com.ptrader.connector.kraken.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.math.BigDecimal;
 
@@ -37,16 +36,6 @@ public class TradeBalanceResult extends Result<TradeBalanceResult> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("equivalentBalance", equivalentBalance)
-                .append("tradeBalance", tradeBalance)
-                .append("marginAmount", marginAmount)
-                .append("unrealizedNetProfitLoss", unrealizedNetProfitLoss)
-                .append("costBasis", costBasis)
-                .append("floatingValuation", floatingValuation)
-                .append("equity", equity)
-                .append("freeMargin", freeMargin)
-                .append("marginLevel", marginLevel)
-                .toString();
+        return JSONUtils.toString(this);
     }
 }

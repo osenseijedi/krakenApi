@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.ptrader.connector.kraken.result.common.OrderDirection;
 import com.ptrader.connector.kraken.result.common.OrderType;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -55,15 +54,7 @@ public class OrdersInformationResult extends Result<Map<String, OrdersInformatio
 
             @Override
             public String toString() {
-                return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                        .append("assetPair", assetPair)
-                        .append("orderDirection", orderDirection)
-                        .append("orderType", orderType)
-                        .append("price", price)
-                        .append("secondaryPrice", secondaryPrice)
-                        .append("leverage", leverage)
-                        .append("order", order)
-                        .toString();
+                return JSONUtils.toString(this);
             }
         }
 
@@ -116,25 +107,7 @@ public class OrdersInformationResult extends Result<Map<String, OrdersInformatio
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                    .append("referralOrderTransactionId", referralOrderTransactionId)
-                    .append("userReferenceId", userReferenceId)
-                    .append("status", status)
-                    .append("openTimestamp", openTimestamp)
-                    .append("orderStartTimestamp", orderStartTimestamp)
-                    .append("orderEndTimestamp", orderEndTimestamp)
-                    .append("description", description)
-                    .append("volumeOrder", volumeOrder)
-                    .append("volumeExecuted", volumeExecuted)
-                    .append("cost", cost)
-                    .append("fee", fee)
-                    .append("averagePrice", averagePrice)
-                    .append("stopPrice", stopPrice)
-                    .append("miscellaneous", miscellaneous)
-                    .append("orderFlags", orderFlags)
-                    .append("reason", reason)
-                    .append("orderClosedTimestamp", orderClosedTimestamp)
-                    .toString();
+            return JSONUtils.toString(this);
         }
     }
 }

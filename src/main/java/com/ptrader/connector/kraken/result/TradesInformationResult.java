@@ -3,8 +3,7 @@ package com.ptrader.connector.kraken.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ptrader.connector.kraken.result.common.OrderDirection;
 import com.ptrader.connector.kraken.result.common.OrderType;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -44,19 +43,7 @@ public class TradesInformationResult extends Result<Map<String, TradesInformatio
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                    .append("orderTransactionId", orderTransactionId)
-                    .append("assetPair", assetPair)
-                    .append("tradeTimestamp", tradeTimestamp)
-                    .append("orderDirection", orderDirection)
-                    .append("orderType", orderType)
-                    .append("price", price)
-                    .append("cost", cost)
-                    .append("fee", fee)
-                    .append("volume", volume)
-                    .append("margin", margin)
-                    .append("miscellaneous", miscellaneous)
-                    .toString();
+            return JSONUtils.toString(this);
         }
     }
 }

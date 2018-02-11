@@ -1,7 +1,6 @@
 package com.ptrader.connector.kraken.result;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 public class ServerTimeResult extends Result<ServerTimeResult.ServerTime> {
 
@@ -11,10 +10,7 @@ public class ServerTimeResult extends Result<ServerTimeResult.ServerTime> {
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                    .append("unixtime", unixtime)
-                    .append("rfc1123", rfc1123)
-                    .toString();
+            return JSONUtils.toString(this);
         }
     }
 }

@@ -2,8 +2,7 @@ package com.ptrader.connector.kraken.result;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,11 +27,7 @@ public class RecentSpreadResult extends ResultWithLastId<Map<String, List<Recent
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                    .append("time", time)
-                    .append("bid", bid)
-                    .append("ask", ask)
-                    .toString();
+            return JSONUtils.toString(this);
         }
     }
 }

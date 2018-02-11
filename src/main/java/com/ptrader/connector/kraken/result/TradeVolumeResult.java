@@ -1,7 +1,6 @@
 package com.ptrader.connector.kraken.result;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.math.BigDecimal;
 
@@ -14,10 +13,7 @@ public class TradeVolumeResult extends Result<TradeVolumeResult.TradeVolume> {
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                    .append("currency", currency)
-                    .append("volume", volume)
-                    .toString();
+            return JSONUtils.toString(this);
         }
     }
 }

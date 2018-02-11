@@ -3,6 +3,8 @@ import com.ptrader.connector.kraken.KrakenApiClient;
 import com.ptrader.connector.kraken.KrakenApiException;
 import com.ptrader.connector.kraken.result.Result;
 
+import static com.ptrader.connector.kraken.input.Interval.FIVE_MINUTES;
+
 public class Main {
 
     public static void main (String args[]) {
@@ -13,7 +15,7 @@ public class Main {
         KrakenApiClient client = new KrakenApiClient(apiKey, secret);
 
         try {
-            Result result = client.getOpenOrders();
+            Result result = client.getOHLC("XRPEUR", FIVE_MINUTES);
 
             System.out.println("result : " + result.getResult());
             System.out.println("error : " + result.getError());
@@ -21,10 +23,6 @@ public class Main {
             e.printStackTrace();
         }
 
-        ApiJsonExchange lastExchange = client.getLastExchange();
-
-        System.out.println(lastExchange.toString());
-
-
+        System.out.println(client.getLastExchange().toString());
     }
 }
