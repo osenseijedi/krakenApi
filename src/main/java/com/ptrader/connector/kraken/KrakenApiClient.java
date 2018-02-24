@@ -8,10 +8,8 @@ import com.ptrader.connector.kraken.result.*;
 import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -27,8 +25,7 @@ public class KrakenApiClient {
         return lastExchange;
     }
 
-    public KrakenApiClient() {
-    }
+    public KrakenApiClient() {}
 
     public KrakenApiClient(String apiKey, String apiSecret) {
         this();
@@ -36,38 +33,28 @@ public class KrakenApiClient {
         this.apiSecret = apiSecret;
     }
 
+    /*******************************************************************************************************************/
+    /*******************************************************************************************************************/
+    /*******************************************************************************************************************/
 
-    protected <T extends Result> T callPublic(KrakenApiMethod method, Class<T> resultClass) throws KrakenApiException {
-        return callPublic(method, resultClass, null);
-    }
-
-    protected <T extends Result> T callPublic(KrakenApiMethod method, Class<T> resultClass, Map<String, String> params) throws KrakenApiException {
+    protected <T extends Result> Optional<T> __callPublic(KrakenApiMethod method, Class<T> resultClass, Map<String, String> params, BiFunction<ApiJsonExchange, Class<T>, T> makeResult) {
         try {
-            lastExchange = KrakenHttpJsonClient.executePublicQuery(prepareExchange(ApiJsonRequestType.PUBLIC, method, resultClass), method, params);
-            return checkResult(makeResult(lastExchange, resultClass));
+            lastExchange = KrakenHttpJsonClient.executePublicQuery(
+                    prepareExchange(ApiJsonRequestType.PUBLIC, method, resultClass),
+                    method,
+                    params
+            );
+            return Optional.ofNullable(checkResult(makeResult.apply(lastExchange, resultClass)));
         } catch (Exception ex) {
-            throw handleException(ex);
+            handleException(ex);
         }
+
+        return Optional.empty();
     }
 
-    protected <T extends Result> T callPublicWithLastId(KrakenApiMethod method, Class<T> resultClass, Map<String, String> params) throws KrakenApiException {
+    protected <T extends Result> Optional<T> __callPrivate(KrakenApiMethod method, Class<T> resultClass, Map<String, String> params, BiFunction<ApiJsonExchange, Class<T>, T> makeResult) {
         try {
-            lastExchange = KrakenHttpJsonClient.executePublicQuery(prepareExchange(ApiJsonRequestType.PUBLIC, method, resultClass), method, params);
-            return checkResult(makeResultExtractLastId(lastExchange, resultClass));
-        } catch (Exception ex) {
-            throw handleException(ex);
-        }
-    }
-
-
-    protected <T extends Result> T callPrivate(KrakenApiMethod method, Class<T> resultClass) throws KrakenApiException {
-        return callPrivate(method, resultClass, null);
-    }
-
-
-    protected <T extends Result> T callPrivate(KrakenApiMethod method, Class<T> resultClass, Map<String, String> params) throws KrakenApiException {
-        try {
-            ApiJsonExchange exchange = KrakenHttpJsonClient.executePrivateQuery(
+            lastExchange = KrakenHttpJsonClient.executePrivateQuery(
                     prepareExchange(ApiJsonRequestType.PRIVATE, method, resultClass),
                     method,
                     apiKey,
@@ -75,12 +62,44 @@ public class KrakenApiClient {
                     params
             );
 
-            return makeResult(exchange, resultClass);
+            return Optional.ofNullable(makeResult.apply(lastExchange, resultClass));
         } catch (Exception ex) {
-            throw handleException(ex);
+            handleException(ex);
         }
+
+        return Optional.empty();
     }
 
+    /*******************************************************************************************************************/
+    /*******************************************************************************************************************/
+    /*******************************************************************************************************************/
+
+    protected <T extends Result> Optional<T> callPublic(KrakenApiMethod method, Class<T> resultClass) {
+        return callPublic(method, resultClass, null);
+    }
+
+    protected <T extends Result> Optional<T> callPublic(KrakenApiMethod method, Class<T> resultClass, Map<String, String> params) {
+        return __callPublic(method, resultClass, params, this::makeResult);
+    }
+
+    protected <T extends Result> Optional<T> callPublicWithLastId(KrakenApiMethod method, Class<T> resultClass, Map<String, String> params) {
+        return __callPublic(method, resultClass, params, this::makeResultExtractLastId);
+    }
+
+    /*******************************************************************************************************************/
+    /*******************************************************************************************************************/
+
+    protected <T extends Result> Optional<T> callPrivate(KrakenApiMethod method, Class<T> resultClass) {
+        return callPrivate(method, resultClass, null);
+    }
+
+    protected <T extends Result> Optional<T> callPrivate(KrakenApiMethod method, Class<T> resultClass, Map<String, String> params) {
+        return __callPrivate(method, resultClass, params, this::makeResult);
+    }
+
+    /*******************************************************************************************************************/
+    /*******************************************************************************************************************/
+    /*******************************************************************************************************************/
 
     private <T extends Result> ApiJsonExchange prepareExchange(ApiJsonRequestType requestType, KrakenApiMethod method, Class<T> resultClass) {
         lastExchange = new ApiJsonExchange();
@@ -94,12 +113,10 @@ public class KrakenApiClient {
         return lastExchange;
     }
 
-    private KrakenApiException handleException(Exception ex) {
+    private void handleException(Exception ex) {
         lastExchange.setException(ex);
         lastExchange.setCompletedOn(new Date().getTime());
-        return new KrakenApiException("unable to query Kraken API", ex);
     }
-
 
     private <T extends Result> T makeResult(String rawResponse, Class<T> resultClass) {
         try {
@@ -108,7 +125,6 @@ public class KrakenApiClient {
             throw new RuntimeException(e);
         }
     }
-
 
     private <T extends Result> T makeResult(ApiJsonExchange exchange, Class<T> resultClass) {
         return makeResult(exchange.getResponse().getRawResponse(), resultClass);
@@ -154,7 +170,6 @@ public class KrakenApiClient {
      *
      * @param response
      * @return extracted result
-     * @throws KrakenApiException
      */
     private LastIdExtractedResult extractLastId(String response) {
         final String lastPattern = ",(\\s*)\"last\":\"{0,1}([0-9]+)\"{0,1}";
@@ -176,15 +191,15 @@ public class KrakenApiClient {
     /*******************************************************************************************************************/
     /*******************************************************************************************************************/
 
-    public ServerTimeResult getServerTime() throws KrakenApiException {
+    public Optional<ServerTimeResult> getServerTime() {
         return callPublic(KrakenApiMethod.SERVER_TIME, ServerTimeResult.class);
     }
 
-    public AssetsInformationResult getAssetsInformation() throws KrakenApiException {
+    public Optional<AssetsInformationResult> getAssetsInformation() {
         return callPublic(KrakenApiMethod.ASSET_INFORMATION, AssetsInformationResult.class);
     }
 
-    public AssetsInformationResult getAssetsInformation(String... assets) throws KrakenApiException {
+    public Optional<AssetsInformationResult> getAssetsInformation(String... assets) {
 
         Map<String, String> params = new HashMap<>();
         params.put("asset", String.join(",", assets));
@@ -192,11 +207,11 @@ public class KrakenApiClient {
         return callPublic(KrakenApiMethod.ASSET_INFORMATION, AssetsInformationResult.class, params);
     }
 
-    public AssetPairsResult getAssetPairs() throws KrakenApiException {
+    public Optional<AssetPairsResult> getAssetPairs() {
         return callPublic(KrakenApiMethod.ASSET_PAIRS, AssetPairsResult.class);
     }
 
-    public AssetPairsResult getAssetPairs(InfoInput info, String... assetPairs) throws KrakenApiException {
+    public Optional<AssetPairsResult> getAssetPairs(InfoInput info, String... assetPairs) {
 
         Map<String, String> params = new HashMap<>();
         params.put("info", info.getValue());
@@ -206,14 +221,14 @@ public class KrakenApiClient {
     }
 
 
-    public TickerInformationResult getTickerInformation(List<String> pairs) throws KrakenApiException {
+    public Optional<TickerInformationResult> getTickerInformation(List<String> pairs) {
         Map<String, String> params = new HashMap<>();
         params.put("pair", String.join(",", pairs));
 
         return callPublic(KrakenApiMethod.TICKER_INFORMATION, TickerInformationResult.class, params);
     }
 
-    public OHLCResult getOHLC(String pair, Interval interval, Integer since) throws KrakenApiException {
+    public Optional<OHLCResult> getOHLC(String pair, Interval interval, Integer since) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
@@ -223,7 +238,7 @@ public class KrakenApiClient {
         return callPublicWithLastId(KrakenApiMethod.OHLC, OHLCResult.class, params);
     }
 
-    public OHLCResult getOHLC(String pair, Interval interval) throws KrakenApiException {
+    public Optional<OHLCResult> getOHLC(String pair, Interval interval) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
@@ -232,7 +247,7 @@ public class KrakenApiClient {
         return callPublicWithLastId(KrakenApiMethod.OHLC, OHLCResult.class, params);
     }
 
-    public OrderBookResult getOrderBook(String pair, Integer count) throws KrakenApiException {
+    public Optional<OrderBookResult> getOrderBook(String pair, Integer count) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
@@ -241,7 +256,7 @@ public class KrakenApiClient {
         return callPublic(KrakenApiMethod.ORDER_BOOK, OrderBookResult.class, params);
     }
 
-    public OrderBookResult getOrderBook(String pair) throws KrakenApiException {
+    public Optional<OrderBookResult> getOrderBook(String pair) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
@@ -249,7 +264,7 @@ public class KrakenApiClient {
         return callPublic(KrakenApiMethod.ORDER_BOOK, OrderBookResult.class, params);
     }
 
-    public RecentTradeResult getRecentTrades(String pair) throws KrakenApiException {
+    public Optional<RecentTradeResult> getRecentTrades(String pair) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
@@ -257,7 +272,7 @@ public class KrakenApiClient {
         return callPublicWithLastId(KrakenApiMethod.RECENT_TRADES, RecentTradeResult.class, params);
     }
 
-    public RecentTradeResult getRecentTrades(String pair, Integer since) throws KrakenApiException {
+    public Optional<RecentTradeResult> getRecentTrades(String pair, Integer since) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
@@ -266,7 +281,7 @@ public class KrakenApiClient {
         return callPublicWithLastId(KrakenApiMethod.RECENT_TRADES, RecentTradeResult.class, params);
     }
 
-    public RecentSpreadResult getRecentSpreads(String pair) throws KrakenApiException {
+    public Optional<RecentSpreadResult> getRecentSpreads(String pair) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
@@ -274,7 +289,7 @@ public class KrakenApiClient {
         return callPublicWithLastId(KrakenApiMethod.RECENT_SPREADS, RecentSpreadResult.class, params);
     }
 
-    public RecentSpreadResult getRecentSpreads(String pair, Integer since) throws KrakenApiException {
+    public Optional<RecentSpreadResult> getRecentSpreads(String pair, Integer since) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
@@ -283,23 +298,23 @@ public class KrakenApiClient {
         return callPublicWithLastId(KrakenApiMethod.RECENT_SPREADS, RecentSpreadResult.class, params);
     }
 
-    public AccountBalanceResult getAccountBalance() throws KrakenApiException {
+    public Optional<AccountBalanceResult> getAccountBalance() {
         return callPrivate(KrakenApiMethod.ACCOUNT_BALANCE, AccountBalanceResult.class);
     }
 
-    public TradeBalanceResult getTradeBalance() throws KrakenApiException {
+    public Optional<TradeBalanceResult> getTradeBalance() {
         return callPrivate(KrakenApiMethod.TRADE_BALANCE, TradeBalanceResult.class);
     }
 
-    public OpenOrdersResult getOpenOrders() throws KrakenApiException {
+    public Optional<OpenOrdersResult> getOpenOrders() {
         return callPrivate(KrakenApiMethod.OPEN_ORDERS, OpenOrdersResult.class);
     }
 
-    public ClosedOrdersResult getClosedOrders() throws KrakenApiException {
+    public Optional<ClosedOrdersResult> getClosedOrders() {
         return callPrivate(KrakenApiMethod.CLOSED_ORDERS, ClosedOrdersResult.class);
     }
 
-    public OrdersInformationResult getOrdersInformation(List<String> transactions) throws KrakenApiException {
+    public Optional<OrdersInformationResult> getOrdersInformation(List<String> transactions) {
 
         Map<String, String> params = new HashMap<>();
         params.put("txid", transactions.stream().collect(Collectors.joining(",")));
@@ -307,11 +322,11 @@ public class KrakenApiClient {
         return callPrivate(KrakenApiMethod.ORDERS_INFORMATION, OrdersInformationResult.class, params);
     }
 
-    public TradesHistoryResult getTradesHistory() throws KrakenApiException {
+    public Optional<TradesHistoryResult> getTradesHistory() {
         return callPrivate(KrakenApiMethod.TRADES_HISTORY, TradesHistoryResult.class);
     }
 
-    public TradesInformationResult getTradesInformation(List<String> transactions) throws KrakenApiException {
+    public Optional<TradesInformationResult> getTradesInformation(List<String> transactions) {
 
         Map<String, String> params = new HashMap<>();
         params.put("txid", transactions.stream().collect(Collectors.joining(",")));
@@ -319,7 +334,7 @@ public class KrakenApiClient {
         return callPrivate(KrakenApiMethod.TRADES_INFORMATION, TradesInformationResult.class, params);
     }
 
-    public OpenPositionsResult getOpenPositions(List<String> transactions) throws KrakenApiException {
+    public Optional<OpenPositionsResult> getOpenPositions(List<String> transactions) {
 
         Map<String, String> params = new HashMap<>();
         params.put("txid", transactions.stream().collect(Collectors.joining(",")));
@@ -327,11 +342,11 @@ public class KrakenApiClient {
         return callPrivate(KrakenApiMethod.OPEN_POSITIONS, OpenPositionsResult.class, params);
     }
 
-    public LedgersInformationResult getLedgersInformation() throws KrakenApiException {
+    public Optional<LedgersInformationResult> getLedgersInformation() {
         return callPrivate(KrakenApiMethod.LEDGERS_INFORMATION, LedgersInformationResult.class);
     }
 
-    public LedgersResult getLedgers(List<String> ledgerIds) throws KrakenApiException {
+    public Optional<LedgersResult> getLedgers(List<String> ledgerIds) {
 
         Map<String, String> params = new HashMap<>();
         params.put("id", ledgerIds.stream().collect(Collectors.joining(",")));
@@ -339,7 +354,7 @@ public class KrakenApiClient {
         return callPrivate(KrakenApiMethod.QUERY_LEDGERS, LedgersResult.class, params);
     }
 
-    public TradeVolumeResult getTradeVolume() throws KrakenApiException {
+    public Optional<TradeVolumeResult> getTradeVolume() {
         return callPrivate(KrakenApiMethod.TRADE_VOLUME, TradeVolumeResult.class);
     }
 

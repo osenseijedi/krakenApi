@@ -1,28 +1,26 @@
-import com.ptrader.connector.ApiJsonExchange;
 import com.ptrader.connector.kraken.KrakenApiClient;
-import com.ptrader.connector.kraken.KrakenApiException;
-import com.ptrader.connector.kraken.result.Result;
+import com.ptrader.connector.kraken.result.RecentTradeResult;
 
-import static com.ptrader.connector.kraken.input.Interval.FIVE_MINUTES;
+import java.util.Optional;
 
 public class Main {
 
-    public static void main (String args[]) {
+    public static void main(String args[]) {
 
+        // Find these in your Kraken account (you might have to create them)
         String apiKey = "...the key here...";
         String secret = "...the private key here...";
 
         KrakenApiClient client = new KrakenApiClient(apiKey, secret);
 
-        try {
-            Result result = client.getOHLC("XRPEUR", FIVE_MINUTES);
+        Optional<RecentTradeResult> optionalResult = client.getRecentTrades("XRPEUR");
 
-            System.out.println("result : " + result.getResult());
-            System.out.println("error : " + result.getError());
-        } catch (KrakenApiException e) {
-            e.printStackTrace();
-        }
+        // Access result if any
+        optionalResult.ifPresent(
+                o -> System.out.println("result : " + o.getResult())
+        );
 
+        // Access last exchange.
         System.out.println(client.getLastExchange().toString());
     }
 }

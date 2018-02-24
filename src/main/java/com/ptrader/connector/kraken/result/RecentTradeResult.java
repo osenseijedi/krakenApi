@@ -15,9 +15,9 @@ public class RecentTradeResult extends ResultWithLastId<Map<String, List<RecentT
     public static class RecentTrade {
         public BigDecimal price;
         public BigDecimal volume;
-        public BigDecimal time;
+        public BigDecimal time; // Unix Timestamp in seconds. This is a decimal number : milliseconds are returned as well
 
-        public Object buySell;
+        public String buySell;
         public String marketLimit;
         public String miscellaneous;
 
