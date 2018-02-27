@@ -228,12 +228,12 @@ public class KrakenApiClient {
         return callPublic(KrakenApiMethod.TICKER_INFORMATION, TickerInformationResult.class, params);
     }
 
-    public Optional<OHLCResult> getOHLC(String pair, Interval interval, Integer since) {
+    public Optional<OHLCResult> getOHLC(String pair, Interval interval, Long sincelastId) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
         params.put("interval", String.valueOf(interval.getMinutes()));
-        params.put("since", String.valueOf(since));
+        params.put("since", String.valueOf(sincelastId));
 
         return callPublicWithLastId(KrakenApiMethod.OHLC, OHLCResult.class, params);
     }
@@ -272,11 +272,11 @@ public class KrakenApiClient {
         return callPublicWithLastId(KrakenApiMethod.RECENT_TRADES, RecentTradeResult.class, params);
     }
 
-    public Optional<RecentTradeResult> getRecentTrades(String pair, Integer since) {
+    public Optional<RecentTradeResult> getRecentTrades(String pair, Long sincelastId) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
-        params.put("since", String.valueOf(since));
+        params.put("since", String.valueOf(sincelastId));
 
         return callPublicWithLastId(KrakenApiMethod.RECENT_TRADES, RecentTradeResult.class, params);
     }
@@ -289,11 +289,11 @@ public class KrakenApiClient {
         return callPublicWithLastId(KrakenApiMethod.RECENT_SPREADS, RecentSpreadResult.class, params);
     }
 
-    public Optional<RecentSpreadResult> getRecentSpreads(String pair, Integer since) {
+    public Optional<RecentSpreadResult> getRecentSpreads(String pair, Long sincelastId) {
 
         Map<String, String> params = new HashMap<>();
         params.put("pair", pair);
-        params.put("since", String.valueOf(since));
+        params.put("since", String.valueOf(sincelastId));
 
         return callPublicWithLastId(KrakenApiMethod.RECENT_SPREADS, RecentSpreadResult.class, params);
     }
