@@ -1,7 +1,11 @@
+plugins {
+    id 'java'
+    id "io.freefair.lombok" version "5.0.0-rc6"
+}
+
 group 'krakenApi'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
 
 sourceCompatibility = 1.8
 

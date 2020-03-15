@@ -2,6 +2,7 @@ package com.ptrader.connector.kraken;
 
 import com.ptrader.connector.ApiJsonExchange;
 import com.ptrader.connector.ApiJsonRequestType;
+import com.ptrader.connector.kraken.input.AddStandardOrderInput;
 import com.ptrader.connector.kraken.input.InfoInput;
 import com.ptrader.connector.kraken.input.Interval;
 import com.ptrader.connector.kraken.result.*;
@@ -356,6 +357,11 @@ public class KrakenApiClient {
 
     public Optional<TradeVolumeResult> getTradeVolume() {
         return callPrivate(KrakenApiMethod.TRADE_VOLUME, TradeVolumeResult.class);
+    }
+
+    public Optional<AddStandardOrderResult> addStandardOrder(AddStandardOrderInput input)
+    {
+        return callPrivate(KrakenApiMethod.ADD_STANDARD_ORDER, AddStandardOrderResult.class, input.getInput());
     }
 
 }

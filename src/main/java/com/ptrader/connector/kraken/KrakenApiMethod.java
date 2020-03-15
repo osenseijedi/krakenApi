@@ -21,7 +21,8 @@ public enum KrakenApiMethod {
     OPEN_POSITIONS("OpenPositions", true),
     LEDGERS_INFORMATION("Ledgers", true),
     QUERY_LEDGERS("QueryLedgers", true),
-    TRADE_VOLUME("TradeVolume", true);
+    TRADE_VOLUME("TradeVolume", true),
+    ADD_STANDARD_ORDER("AddOrder", true);
 
     //TODO put in a properties
     public final static String BASE_URL = "https://api.kraken.com";
