@@ -63,7 +63,7 @@ public class AddStandardOrderInput implements ApiInput {
 
     private Optional<String> userReferenceId;
 
-    private boolean validate;
+    private boolean validateInputOnly;
 
     public void setLeverage(BigDecimal leverage) throws InvalidStateException {
         this.leverage = Optional.of(leverage);
@@ -132,7 +132,7 @@ public class AddStandardOrderInput implements ApiInput {
         startTime.ifPresent(time -> res.put("starttm", time.toString()));
         expireTime.ifPresent(time -> res.put("expiretm", time.toString()));
         userReferenceId.ifPresent(userReferenceId -> res.put("expiretm",userReferenceId));
-        res.put("validate", "validate");
+        res.put("validate", String.valueOf(validateInputOnly));
 
         return res;
     }
