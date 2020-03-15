@@ -1,6 +1,7 @@
 package com.ptrader.connector.kraken.input;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Optional;
 
 public class AddStandardOrderInputFactory {
@@ -14,7 +15,14 @@ public class AddStandardOrderInputFactory {
                 .pair(pair)
                 .transactionType(type)
                 .volume(volume)
-                .validateInputOnly(validateInputOnly);
+                .validateInputOnly(validateInputOnly)
+                .price(Optional.empty())
+                .price2(Optional.empty())
+                .startTime(Optional.empty())
+                .expireTime(Optional.empty())
+                .leverage(Optional.empty())
+                .userReferenceId(Optional.empty())
+                .oflags(Collections.emptyList());
     }
 
     public static AddStandardOrderInput createMarketOrder(String pair, TransactionType type, BigDecimal volume, boolean validateInputOnly) {
