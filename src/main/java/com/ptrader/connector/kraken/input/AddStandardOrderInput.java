@@ -124,14 +124,14 @@ public class AddStandardOrderInput implements ApiInput {
         res.put("pair", pair);
         res.put("type", transactionType.getValue());
         res.put("ordertype", orderType.getValue());
-        price.ifPresent( price -> res.put("price", price.toString()) );
-        price2.ifPresent( price -> res.put("price2", price.toString()) );
+        price.ifPresent(price -> res.put("price", price.toString()));
+        price2.ifPresent(price -> res.put("price2", price.toString()));
         res.put("volume", volume.toPlainString());
         leverage.ifPresent(leverage -> res.put("leverage", leverage.toString()));
         res.put("oflags", oflags.stream().map(OrderFlags::getValue).collect(Collectors.joining(",")));
         startTime.ifPresent(time -> res.put("starttm", time.toString()));
         expireTime.ifPresent(time -> res.put("expiretm", time.toString()));
-        userReferenceId.ifPresent(userReferenceId -> res.put("expiretm",userReferenceId));
+        userReferenceId.ifPresent(userReferenceId -> res.put("expiretm", userReferenceId));
         res.put("validate", String.valueOf(validateInputOnly));
 
         return res;

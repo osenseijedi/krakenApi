@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.Map;
 
 
-public class KrakenHttpJsonClient extends HttpJsonClient {
+class KrakenHttpJsonClient extends HttpJsonClient {
 
     private static void checkApiKey(String apiKey) throws KrakenApiException {
         if (apiKey == null) {
@@ -26,7 +26,7 @@ public class KrakenHttpJsonClient extends HttpJsonClient {
         }
     }
 
-    protected static ApiJsonExchange getPrivateJsonResponse(ApiJsonExchange exchange, URL url, String apiKey, String postData, String signature) throws IOException, KrakenApiException {
+    private static ApiJsonExchange getPrivateJsonResponse(ApiJsonExchange exchange, URL url, String apiKey, String postData, String signature) throws IOException, KrakenApiException {
 
         checkApiKey(apiKey);
 
@@ -57,11 +57,11 @@ public class KrakenHttpJsonClient extends HttpJsonClient {
         }
     }
 
-    protected static ApiJsonExchange executePublicQuery(ApiJsonExchange exchange, KrakenApiMethod method, Map<String, String> params) throws IOException {
+    static ApiJsonExchange executePublicQuery(ApiJsonExchange exchange, KrakenApiMethod method, Map<String, String> params) throws IOException {
         return executePublicQuery(exchange, method.getEntireUrl(), params);
     }
 
-    public static ApiJsonExchange executePrivateQuery(ApiJsonExchange exchange, KrakenApiMethod method, String apiKey, String secret, Map<String, String> params) throws IOException, KrakenApiException {
+    static ApiJsonExchange executePrivateQuery(ApiJsonExchange exchange, KrakenApiMethod method, String apiKey, String secret, Map<String, String> params) throws IOException, KrakenApiException {
         checkKeys(apiKey, secret);
 
         String nonce = KrakenUtils.generateNonce();

@@ -6,9 +6,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.IOException;
 
-/**
- *
- */
 public class JSONUtils {
 
     public static <T> String toString(T that){

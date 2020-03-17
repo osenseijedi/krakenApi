@@ -9,13 +9,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Map;
 
-public class HttpJsonClient {
+class HttpJsonClient {
 
-    protected static ApiJsonExchange executePublicQuery(ApiJsonExchange exchange, String baseUrl) throws IOException {
-        return executePublicQuery(exchange, baseUrl, null);
-    }
-
-    protected static ApiJsonExchange executePublicQuery(ApiJsonExchange exchange, String baseUrl, Map<String, String> params) throws IOException {
+    static ApiJsonExchange executePublicQuery(ApiJsonExchange exchange, String baseUrl, Map<String, String> params) throws IOException {
         final StringBuilder sbUrl = new StringBuilder(baseUrl).append("?");
 
         if (params != null && !params.isEmpty()) {
@@ -32,7 +28,7 @@ public class HttpJsonClient {
     }
 
 
-    protected static ApiJsonExchange getPublicJsonResponse(ApiJsonExchange exchange, URL url) throws IOException {
+    private static ApiJsonExchange getPublicJsonResponse(ApiJsonExchange exchange, URL url) throws IOException {
         final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 
         try {
@@ -45,7 +41,7 @@ public class HttpJsonClient {
         }
     }
 
-    protected static ApiJsonExchange getJsonResponse(ApiJsonExchange exchange, HttpsURLConnection connection) throws IOException {
+    static ApiJsonExchange getJsonResponse(ApiJsonExchange exchange, HttpsURLConnection connection) throws IOException {
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             StringBuilder response = new StringBuilder();
