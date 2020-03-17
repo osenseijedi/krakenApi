@@ -39,17 +39,18 @@ class KrakenApiClientInternal {
     /* ***************************************************************************************************************** */
     /* ***************************************************************************************************************** */
 
-    private <R extends Result> Optional<R> __callPublic(KrakenApiMethod method,
-                                                          Class<R> resultClass,
-                                                          Map<String, String> params,
-                                                          BiFunction<ApiJsonExchange, Class<R>, R> makeResult) {
+    private <T, R extends Result<T>> Optional<R> __callPublic(KrakenApiMethod method,
+                                                              Class<R> resultClass,
+                                                              Map<String, String> params,
+                                                              BiFunction<ApiJsonExchange, Class<R>, R> makeResult) {
         try {
             lastExchange = KrakenHttpJsonClient.executePublicQuery(
                     prepareExchange(ApiJsonRequestType.PUBLIC, method, resultClass),
                     method,
                     params
             );
-            return Optional.ofNullable(checkResult(makeResult.apply(lastExchange, resultClass)));
+
+            return Optional.of(checkResult(makeResult.apply(lastExchange, resultClass)));
         } catch (Exception ex) {
             handleException(ex);
         }
@@ -57,10 +58,10 @@ class KrakenApiClientInternal {
         return Optional.empty();
     }
 
-    private <R extends Result> Optional<R> __callPrivate(KrakenApiMethod method,
-                                                           Class<R> resultClass,
-                                                           Map<String, String> params,
-                                                           BiFunction<ApiJsonExchange, Class<R>, R> makeResult) {
+    private <T, R extends Result<T>> Optional<R> __callPrivate(KrakenApiMethod method,
+                                                         Class<R> resultClass,
+                                                         Map<String, String> params,
+                                                         BiFunction<ApiJsonExchange, Class<R>, R> makeResult) {
         try {
             lastExchange = KrakenHttpJsonClient.executePrivateQuery(
                     prepareExchange(ApiJsonRequestType.PRIVATE, method, resultClass),
@@ -70,7 +71,7 @@ class KrakenApiClientInternal {
                     params
             );
 
-            return Optional.ofNullable(makeResult.apply(lastExchange, resultClass));
+            return Optional.of(checkResult(makeResult.apply(lastExchange, resultClass)));
         } catch (Exception ex) {
             handleException(ex);
         }
@@ -82,26 +83,29 @@ class KrakenApiClientInternal {
     /* ***************************************************************************************************************** */
     /* ***************************************************************************************************************** */
 
-    <R extends Result> Optional<R> callPublic(KrakenApiMethod method, Class<R> resultClass) {
+    <T, R extends Result<T>> Optional<R> callPublic(KrakenApiMethod method, Class<R> resultClass) {
         return callPublic(method, resultClass, null);
     }
 
-    <R extends Result> Optional<R> callPublic(KrakenApiMethod method, Class<R> resultClass, Map<String, String> params) {
+    <T, R extends Result<T>> Optional<R> callPublic(KrakenApiMethod method, Class<R> resultClass, Map<String, String> params) {
         return __callPublic(method, resultClass, params, this::makeResult);
     }
 
-    <R extends Result> Optional<R> callPublicWithLastId(KrakenApiMethod method, Class<R> resultClass, Map<String, String> params) {
+    <T, R extends Result<T>> Optional<R> callPublicWithLastId(KrakenApiMethod method, Class<R> resultClass, Map<String, String> params) {
         return __callPublic(method, resultClass, params, this::makeResultExtractLastId);
     }
 
     /* ***************************************************************************************************************** */
     /* ***************************************************************************************************************** */
 
-    <R extends Result> Optional<R> callPrivate(KrakenApiMethod method, Class<R> resultClass) {
+    <T, R extends Result<T>> Optional<R> callPrivate(KrakenApiMethod method,
+                                               Class<R> resultClass) {
         return callPrivate(method, resultClass, null);
     }
 
-    <R extends Result> Optional<R> callPrivate(KrakenApiMethod method, Class<R> resultClass, Map<String, String> params) {
+    <T, R extends Result<T>> Optional<R> callPrivate(KrakenApiMethod method,
+                                               Class<R> resultClass,
+                                               Map<String, String> params) {
         return __callPrivate(method, resultClass, params, this::makeResult);
     }
 
@@ -109,7 +113,7 @@ class KrakenApiClientInternal {
     /* ***************************************************************************************************************** */
     /* ***************************************************************************************************************** */
 
-    private <R extends Result> ApiJsonExchange prepareExchange(ApiJsonRequestType requestType, KrakenApiMethod method, Class<R> resultClass) {
+    private <T, R extends Result<T>> ApiJsonExchange prepareExchange(ApiJsonRequestType requestType, KrakenApiMethod method, Class<R> resultClass) {
         lastExchange = new ApiJsonExchange();
         lastExchange.setInitiatedOn(new Date().getTime());
 
@@ -126,7 +130,7 @@ class KrakenApiClientInternal {
         lastExchange.setCompletedOn(new Date().getTime());
     }
 
-    private <R extends Result> R makeResult(String rawResponse, Class<R> resultClass) {
+    private <T, R extends Result<T>> R makeResult(String rawResponse, Class<R> resultClass) {
         try {
             return JSONUtils.fromJsonStringToObject(rawResponse, resultClass);
         } catch (IOException e) {
@@ -134,11 +138,11 @@ class KrakenApiClientInternal {
         }
     }
 
-    private <R extends Result> R makeResult(ApiJsonExchange exchange, Class<R> resultClass) {
+    private <T, R extends Result<T>> R makeResult(ApiJsonExchange exchange, Class<R> resultClass) {
         return makeResult(exchange.getResponse().getRawResponse(), resultClass);
     }
 
-    private <R extends Result> R makeResultExtractLastId(ApiJsonExchange exchange, Class<R> resultClass) {
+    private <T, R extends Result<T>> R makeResultExtractLastId(ApiJsonExchange exchange, Class<R> resultClass) {
         LastIdExtractedResult extractedResult = extractLastId(exchange.getResponse().getRawResponse());
 
         R res = makeResult(extractedResult.responseWithoutLastId, resultClass);
@@ -147,7 +151,7 @@ class KrakenApiClientInternal {
         return res;
     }
 
-    private <R extends Result> R checkResult(R res) throws KrakenApiException {
+    private  <T, R extends Result<T>> R checkResult(R res) throws KrakenApiException {
         if (!res.getError().isEmpty()) {
             throw new KrakenApiException(res.getError());
         }
@@ -179,7 +183,7 @@ class KrakenApiClientInternal {
      * @return extracted result
      */
     private LastIdExtractedResult extractLastId(String response) {
-        final String lastPattern = ",(\\s*)\"last\":\"{0,1}([0-9]+)\"{0,1}";
+        final String lastPattern = ",(\\s*)\"last\":\"?([0-9]+)\"?";
 
         Pattern pattern = Pattern.compile(lastPattern);
         Matcher matcher = pattern.matcher(response);

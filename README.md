@@ -12,3 +12,11 @@ on the call.
 This was made specifically for traceability and auditing.
 
 Feel free to create issues/PR for any bugs and/or improvements.
+
+
+## Run the Main class
+
+Compile and run with
+```
+./gradlew build run
+``` 
