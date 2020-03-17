@@ -17,6 +17,7 @@ public class KrakenHttpJsonClient extends HttpJsonClient {
             throw new KrakenApiException("must provide API key and secret");
         }
     }
+
     private static void checkKeys(String apiKey, String secret) throws KrakenApiException {
         checkApiKey(apiKey);
 
@@ -50,7 +51,9 @@ public class KrakenHttpJsonClient extends HttpJsonClient {
 
             return getJsonResponse(exchange, connection);
         } finally {
-            connection.disconnect();
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
     }
 
