@@ -30,7 +30,6 @@ class KrakenApiClientInternal {
     }
 
     KrakenApiClientInternal(String apiKey, String apiSecret) {
-        this();
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
     }

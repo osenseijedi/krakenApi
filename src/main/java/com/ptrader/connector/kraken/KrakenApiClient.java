@@ -1,18 +1,15 @@
 package com.ptrader.connector.kraken;
 
 import com.ptrader.connector.ApiJsonExchange;
-import com.ptrader.connector.ApiJsonRequestType;
 import com.ptrader.connector.kraken.input.AddStandardOrderInput;
 import com.ptrader.connector.kraken.input.InfoInput;
 import com.ptrader.connector.kraken.input.Interval;
 import com.ptrader.connector.kraken.result.*;
-import com.ptrader.connector.kraken.utils.JSONUtils;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.function.BiFunction;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class KrakenApiClient {
 
@@ -35,7 +32,7 @@ public class KrakenApiClient {
     /* ************ Public calls *************************************************************************************** */
     /* ***************************************************************************************************************** */
 
-
+    // <editor-fold>
     public Optional<ServerTimeResult> getServerTime() {
         return this.krakenApiClientInternal.callPublic(KrakenApiMethod.SERVER_TIME, ServerTimeResult.class);
     }
@@ -142,11 +139,13 @@ public class KrakenApiClient {
 
         return this.krakenApiClientInternal.callPublicWithLastId(KrakenApiMethod.RECENT_SPREADS, RecentSpreadResult.class, params);
     }
+    // </editor-fold>
 
     /* ***************************************************************************************************************** */
     /* ************ Private calls ************************************************************************************** */
     /* ***************************************************************************************************************** */
 
+    // <editor-fold>
     public Optional<AccountBalanceResult> getAccountBalance() {
         return this.krakenApiClientInternal.callPrivate(KrakenApiMethod.ACCOUNT_BALANCE, AccountBalanceResult.class);
     }
@@ -210,5 +209,5 @@ public class KrakenApiClient {
     public Optional<AddStandardOrderResult> addStandardOrder(AddStandardOrderInput input) {
         return this.krakenApiClientInternal.callPrivate(KrakenApiMethod.ADD_STANDARD_ORDER, AddStandardOrderResult.class, input.getInput());
     }
-
+    //</editor-fold>
 }
