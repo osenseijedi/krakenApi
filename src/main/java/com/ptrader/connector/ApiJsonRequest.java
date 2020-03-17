@@ -1,11 +1,17 @@
 package com.ptrader.connector;
 
 import com.ptrader.connector.kraken.utils.JSONUtils;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class ApiJsonRequest {
 
     private URL url;
@@ -18,67 +24,6 @@ public class ApiJsonRequest {
 
     private Map<String, String> params = new HashMap<>();
     private Map<String, String> requestProperties = new HashMap<>(); // headers ?
-
-
-    public ApiJsonRequest() {
-
-    }
-
-    public URL getUrl() {
-        return url;
-    }
-
-    public void setUrl(URL url) {
-        this.url = url;
-    }
-
-    public Map<String, String> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, String> params) {
-        this.params = params;
-    }
-
-    public String getRequestMethod() {
-        return requestMethod;
-    }
-
-    public void setRequestMethod(String requestMethod) {
-        this.requestMethod = requestMethod;
-    }
-
-    public Map<String, String> getRequestProperties() {
-        return requestProperties;
-    }
-
-    public void setRequestProperties(Map<String, String> requestProperties) {
-        this.requestProperties = requestProperties;
-    }
-
-    public String getNonce() {
-        return nonce;
-    }
-
-    public void setNonce(String nonce) {
-        this.nonce = nonce;
-    }
-
-    public String getSignature() {
-        return signature;
-    }
-
-    public void setSignature(String signature) {
-        this.signature = signature;
-    }
-
-    public ApiJsonRequestType getRequestType() {
-        return requestType;
-    }
-
-    public void setRequestType(ApiJsonRequestType requestType) {
-        this.requestType = requestType;
-    }
 
     @Override
     public String toString() {

@@ -9,8 +9,7 @@ public class AddStandardOrderInputFactory {
     private static AddStandardOrderInput.AddStandardOrderInputBuilder buildCommon(String pair,
                                                                                   TransactionType type,
                                                                                   BigDecimal volume,
-                                                                                  boolean validateInputOnly)
-    {
+                                                                                  boolean validateInputOnly) {
         return AddStandardOrderInput.builder()
                 .pair(pair)
                 .transactionType(type)

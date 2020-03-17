@@ -20,7 +20,8 @@ public class Main {
                 o -> System.out.println("result : " + o.getResult())
         );
 
-        // Access last exchange.
+        // Access last exchange informations, errors, ....
+        // Can be used for auditing, debugging, ...
         System.out.println(client.getLastExchange().toString());
     }
 }

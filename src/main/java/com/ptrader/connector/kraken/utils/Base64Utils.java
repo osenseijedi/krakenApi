@@ -2,7 +2,7 @@ package com.ptrader.connector.kraken.utils;
 
 import java.util.Base64;
 
-public final class Base64Utils {
+final class Base64Utils {
 
     private Base64Utils() {
         throw new UnsupportedOperationException();
@@ -14,7 +14,7 @@ public final class Base64Utils {
      * @param input data to decode
      * @return decoded data
      */
-    public static byte[] base64Decode(String input) {
+    static byte[] base64Decode(String input) {
         return Base64.getDecoder().decode(input);
     }
 
@@ -24,7 +24,7 @@ public final class Base64Utils {
      * @param data to encode
      * @return encoded data
      */
-    public static String base64Encode(byte[] data) {
+    static String base64Encode(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
     }
 }
