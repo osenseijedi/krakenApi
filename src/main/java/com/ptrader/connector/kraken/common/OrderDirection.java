@@ -2,7 +2,6 @@ package com.ptrader.connector.kraken.common;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-// FIXME : NEed to merge with input.TransactionType
 public enum OrderDirection {
 
     BUY("buy"),

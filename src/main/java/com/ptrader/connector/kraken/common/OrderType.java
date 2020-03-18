@@ -2,7 +2,6 @@ package com.ptrader.connector.kraken.common;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-// FIXME : NEed to merge with input.OrderType
 public enum OrderType {
     MARKET("market"),
     LIMIT("limit"),
