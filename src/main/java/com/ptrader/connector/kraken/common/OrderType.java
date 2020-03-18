@@ -1,4 +1,4 @@
-package com.ptrader.connector.kraken.result.common;
+package com.ptrader.connector.kraken.common;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

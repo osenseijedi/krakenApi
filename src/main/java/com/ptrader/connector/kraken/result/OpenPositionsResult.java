@@ -1,8 +1,8 @@
 package com.ptrader.connector.kraken.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptrader.connector.kraken.result.common.OrderDirection;
-import com.ptrader.connector.kraken.result.common.OrderType;
+import com.ptrader.connector.kraken.common.OrderDirection;
+import com.ptrader.connector.kraken.common.OrderType;
 import com.ptrader.connector.kraken.utils.JSONUtils;
 
 import java.math.BigDecimal;
