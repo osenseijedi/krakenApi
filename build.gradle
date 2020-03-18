@@ -21,6 +21,14 @@ repositories {
     mavenCentral()
 }
 
+task packageSources(type: Jar, dependsOn: 'classes') {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts { archives packageSources }
+
+
 dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:2.10.3"
     implementation "org.apache.commons:commons-lang3:3.9"

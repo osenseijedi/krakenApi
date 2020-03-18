@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public class Main {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         // Find these in your Kraken account (you might have to create them)
         String apiKey = "...the key here...";

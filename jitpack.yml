@@ -1,0 +1,4 @@
+# info at : https://jitpack.io/docs/BUILDING/#custom-commands
+
+jdk:
+  - openjdk11
