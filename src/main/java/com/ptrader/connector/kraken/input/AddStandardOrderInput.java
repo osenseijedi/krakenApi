@@ -1,5 +1,7 @@
 package com.ptrader.connector.kraken.input;
 
+import com.ptrader.connector.kraken.common.OrderDirection;
+import com.ptrader.connector.kraken.common.OrderType;
 import com.ptrader.connector.kraken.input.exceptions.InvalidStateException;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,7 +45,7 @@ public class AddStandardOrderInput implements ApiInput {
     // TODO this should be verified
     private String pair;
 
-    private TransactionType transactionType;
+    private OrderDirection orderDirection;
 
     private OrderType orderType;
 
@@ -122,7 +124,7 @@ public class AddStandardOrderInput implements ApiInput {
         Map<String, String> res = new HashMap<>();
 
         res.put("pair", pair);
-        res.put("type", transactionType.getValue());
+        res.put("type", orderDirection.getValue());
         res.put("ordertype", orderType.getValue());
         price.ifPresent(price -> res.put("price", price.toString()));
         price2.ifPresent(price -> res.put("price2", price.toString()));
